@@ -90,7 +90,6 @@ def add_formula(doc, formula_text):
     run = p.add_run(formula_text)
     ensure_rFonts(run, 'Cambria Math', 'Cambria Math')
     run.font.size = Pt(12)
-    run.font.italic = True
     return p
 
 def add_result_table(doc, headers, rows):
