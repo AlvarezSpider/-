@@ -1,0 +1,6 @@
+# 个人信息/报告
+课程设计报告.docx
+*.docx
+
+# Claude配置
+.claude/
