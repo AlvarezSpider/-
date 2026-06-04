@@ -180,7 +180,7 @@ set_run(run, '宋体', Pt(14))
 doc.add_page_break()
 
 # ============================================================
-# 目录页（静态）
+# 目录页（动态TOC域）
 # ============================================================
 p = doc.add_paragraph()
 p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -189,30 +189,31 @@ set_run(run, '宋体', Pt(18), True)
 
 doc.add_paragraph()
 
-toc_entries = [
-    (0, '题目一：轻型货车动力性能计算（习题1.3）'),
-    (1, '1.1  题目描述'), (1, '1.2  已知参数'),
-    (1, '1.3  变速器传动比（五档）'), (1, '1.4  计算公式'), (1, '1.5  计算结果'),
-    (0, '题目二：轻型货车燃油经济性计算（习题2.7）'),
-    (1, '2.1  题目描述'), (1, '2.2  负荷特性拟合系数'),
-    (1, '2.3  计算公式'), (1, '2.4  计算结果'),
-    (0, '题目三：中型货车制动性能计算（习题4.3）'),
-    (1, '3.1  题目描述'), (1, '3.2  计算公式'), (1, '3.3  计算结果'),
-    (0, '附录：编程程序代码'),
-    (1, 'A.1  题目一：动力性能计算程序'),
-    (1, 'A.2  题目二：燃油经济性计算程序'),
-    (1, 'A.3  题目三：制动性能计算程序'),
-]
+# 插入 TOC 域代码
+p_toc = doc.add_paragraph()
+run_begin = p_toc.add_run()
+fld_begin = OxmlElement('w:fldChar')
+fld_begin.set(qn('w:fldCharType'), 'begin')
+run_begin._r.append(fld_begin)
 
-for level, text in toc_entries:
-    p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(2)
-    p.paragraph_format.space_after = Pt(2)
-    p.paragraph_format.left_indent = Cm(0) if level == 0 else Cm(1.0)
-    run = p.add_run(text)
-    set_run(run, '宋体', Pt(12) if level == 0 else Pt(11), level == 0)
-    run2 = p.add_run('  ' + '·' * 40 + '  ')
-    set_run(run2, '宋体', Pt(10))
+run_instr = p_toc.add_run()
+instr = OxmlElement('w:instrText')
+instr.set(qn('xml:space'), 'preserve')
+instr.text = ' TOC \\o "1-3" \\h \\z \\u '
+run_instr._r.append(instr)
+
+run_sep = p_toc.add_run()
+fld_sep = OxmlElement('w:fldChar')
+fld_sep.set(qn('w:fldCharType'), 'separate')
+run_sep._r.append(fld_sep)
+
+run_text = p_toc.add_run('（请按 Ctrl+A 后按 F9 更新目录）')
+set_run(run_text, '宋体', Pt(10))
+
+run_end = p_toc.add_run()
+fld_end = OxmlElement('w:fldChar')
+fld_end.set(qn('w:fldCharType'), 'end')
+run_end._r.append(fld_end)
 
 doc.add_page_break()
 
