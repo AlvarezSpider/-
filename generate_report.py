@@ -82,13 +82,14 @@ def add_code_block(doc, code_text, title=None):
         run.font.size = Pt(8)
 
 def add_formula(doc, formula_text):
-    """添加公式（居中）"""
+    """添加公式（居中，Cambria Math 斜体，类似LaTeX风格）"""
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p.paragraph_format.space_before = Pt(6)
-    p.paragraph_format.space_after = Pt(6)
+    p.paragraph_format.space_before = Pt(8)
+    p.paragraph_format.space_after = Pt(8)
     run = p.add_run(formula_text)
-    set_run(run, '宋体', Pt(11))
+    ensure_rFonts(run, 'Cambria Math', 'Cambria Math')
+    run.font.size = Pt(12)
     run.font.italic = True
     return p
 
